@@ -4,10 +4,10 @@
 # Using build pattern: autogen
 #
 Name     : libva-utils
-Version  : 2.18.2
-Release  : 31
-URL      : https://github.com/intel/libva-utils/archive/2.18.2/libva-utils-2.18.2.tar.gz
-Source0  : https://github.com/intel/libva-utils/archive/2.18.2/libva-utils-2.18.2.tar.gz
+Version  : 2.19.0
+Release  : 32
+URL      : https://github.com/intel/libva-utils/archive/2.19.0/libva-utils-2.19.0.tar.gz
+Source0  : https://github.com/intel/libva-utils/archive/2.19.0/libva-utils-2.19.0.tar.gz
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : BSD-3-Clause MIT
@@ -47,43 +47,86 @@ license components for the libva-utils package.
 
 
 %prep
-%setup -q -n libva-utils-2.18.2
-cd %{_builddir}/libva-utils-2.18.2
+%setup -q -n libva-utils-2.19.0
+cd %{_builddir}/libva-utils-2.19.0
+pushd ..
+cp -a libva-utils-2.19.0 buildavx2
+popd
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1681744522
+export SOURCE_DATE_EPOCH=1688569278
 export GCC_IGNORE_WERROR=1
-export CFLAGS="$CFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz "
-export FCFLAGS="$FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz "
-export FFLAGS="$FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz "
-export CXXFLAGS="$CXXFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz "
+export CFLAGS="$CFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+export FCFLAGS="$FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+export FFLAGS="$FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+export CXXFLAGS="$CXXFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
 %autogen --disable-static
 make  %{?_smp_mflags}
 
+pushd ../buildavx2/
+export CFLAGS="$CFLAGS -m64 -march=x86-64-v3 -Wl,-z,x86-64-v3 "
+export CXXFLAGS="$CXXFLAGS -m64 -march=x86-64-v3 -Wl,-z,x86-64-v3 "
+export FFLAGS="$FFLAGS -m64 -march=x86-64-v3 -Wl,-z,x86-64-v3 "
+export FCFLAGS="$FCFLAGS -m64 -march=x86-64-v3 "
+export LDFLAGS="$LDFLAGS -m64 -march=x86-64-v3 "
+%autogen --disable-static
+make  %{?_smp_mflags}
+popd
 %check
 export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 make %{?_smp_mflags} check
+cd ../buildavx2;
+make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1681744522
+export SOURCE_DATE_EPOCH=1688569278
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/libva-utils
 cp %{_builddir}/libva-utils-%{version}/COPYING %{buildroot}/usr/share/package-licenses/libva-utils/946e6b5d574d506ac5f84e0826d29887b3d5a2f6 || :
 cp %{_builddir}/libva-utils-%{version}/test/gtest/LICENSE %{buildroot}/usr/share/package-licenses/libva-utils/5a2314153eadadc69258a9429104cd11804ea304 || :
+pushd ../buildavx2/
+%make_install_v3
+popd
 %make_install
+/usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot} %{buildroot}/usr/share/clear/filemap/filemap-%{name}
 
 %files
 %defattr(-,root,root,-)
 
 %files bin
 %defattr(-,root,root,-)
+/V3/usr/bin/av1encode
+/V3/usr/bin/avcenc
+/V3/usr/bin/avcstreamoutdemo
+/V3/usr/bin/h264encode
+/V3/usr/bin/hevcencode
+/V3/usr/bin/jpegenc
+/V3/usr/bin/loadjpeg
+/V3/usr/bin/mpeg2vaenc
+/V3/usr/bin/mpeg2vldemo
+/V3/usr/bin/putsurface
+/V3/usr/bin/putsurface_wayland
+/V3/usr/bin/sfcsample
+/V3/usr/bin/vacopy
+/V3/usr/bin/vainfo
+/V3/usr/bin/vavpp
+/V3/usr/bin/vp8enc
+/V3/usr/bin/vp9enc
+/V3/usr/bin/vpp3dlut
+/V3/usr/bin/vppblending
+/V3/usr/bin/vppchromasitting
+/V3/usr/bin/vppdenoise
+/V3/usr/bin/vpphdr_tm
+/V3/usr/bin/vppscaling_csc
+/V3/usr/bin/vppscaling_n_out_usrptr
+/V3/usr/bin/vppsharpness
 /usr/bin/av1encode
 /usr/bin/avcenc
 /usr/bin/avcstreamoutdemo
