@@ -4,10 +4,10 @@
 # Using build pattern: autogen
 #
 Name     : libva-utils
-Version  : 2.19.0
-Release  : 32
-URL      : https://github.com/intel/libva-utils/archive/2.19.0/libva-utils-2.19.0.tar.gz
-Source0  : https://github.com/intel/libva-utils/archive/2.19.0/libva-utils-2.19.0.tar.gz
+Version  : 2.20.0
+Release  : 33
+URL      : https://github.com/intel/libva-utils/archive/2.20.0/libva-utils-2.20.0.tar.gz
+Source0  : https://github.com/intel/libva-utils/archive/2.20.0/libva-utils-2.20.0.tar.gz
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : BSD-3-Clause MIT
@@ -47,10 +47,10 @@ license components for the libva-utils package.
 
 
 %prep
-%setup -q -n libva-utils-2.19.0
-cd %{_builddir}/libva-utils-2.19.0
+%setup -q -n libva-utils-2.20.0
+cd %{_builddir}/libva-utils-2.20.0
 pushd ..
-cp -a libva-utils-2.19.0 buildavx2
+cp -a libva-utils-2.20.0 buildavx2
 popd
 
 %build
@@ -58,7 +58,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1688569278
+export SOURCE_DATE_EPOCH=1694704381
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
 export FCFLAGS="$FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
@@ -86,7 +86,7 @@ cd ../buildavx2;
 make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1688569278
+export SOURCE_DATE_EPOCH=1694704381
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/libva-utils
 cp %{_builddir}/libva-utils-%{version}/COPYING %{buildroot}/usr/share/package-licenses/libva-utils/946e6b5d574d506ac5f84e0826d29887b3d5a2f6 || :
