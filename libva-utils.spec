@@ -7,7 +7,7 @@
 #
 Name     : libva-utils
 Version  : 2.20.1
-Release  : 34
+Release  : 35
 URL      : https://github.com/intel/libva-utils/archive/2.20.1/libva-utils-2.20.1.tar.gz
 Source0  : https://github.com/intel/libva-utils/archive/2.20.1/libva-utils-2.20.1.tar.gz
 Summary  : No detailed summary available
@@ -15,6 +15,7 @@ Group    : Development/Tools
 License  : BSD-3-Clause MIT
 Requires: libva-utils-bin = %{version}-%{release}
 Requires: libva-utils-license = %{version}-%{release}
+BuildRequires : perl(Getopt::Long)
 BuildRequires : pkgconfig(libdrm)
 BuildRequires : pkgconfig(libva)
 BuildRequires : pkgconfig(libva-drm)
@@ -60,7 +61,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1701824360
+export SOURCE_DATE_EPOCH=1702025694
 export GCC_IGNORE_WERROR=1
 CLEAR_INTERMEDIATE_CFLAGS="$CLEAR_INTERMEDIATE_CFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
 CLEAR_INTERMEDIATE_FCFLAGS="$CLEAR_INTERMEDIATE_FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
@@ -105,7 +106,7 @@ FFLAGS="$CLEAR_INTERMEDIATE_FFLAGS"
 FCFLAGS="$CLEAR_INTERMEDIATE_FCFLAGS"
 ASFLAGS="$CLEAR_INTERMEDIATE_ASFLAGS"
 LDFLAGS="$CLEAR_INTERMEDIATE_LDFLAGS"
-export SOURCE_DATE_EPOCH=1701824360
+export SOURCE_DATE_EPOCH=1702025694
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/libva-utils
 cp %{_builddir}/libva-utils-%{version}/COPYING %{buildroot}/usr/share/package-licenses/libva-utils/946e6b5d574d506ac5f84e0826d29887b3d5a2f6 || :
